@@ -12,6 +12,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+$router->get('/login','AuthController@login');
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -25,5 +26,7 @@ function resource($router,$url, $model){
     $router->delete($url.'/{id}', $model.'Controller@destroy');
 }
 
+$router->group(['middleware'=>'auth'], function () use ($router) {
 resource($router, '/topics', 'Topic');
 resource($router, '/users', 'User');
+});
